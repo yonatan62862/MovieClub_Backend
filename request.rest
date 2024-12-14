@@ -1,0 +1,15 @@
+
+###
+
+GET http://localhost:3000/posts
+
+###
+
+GET http://localhost:3000/posts/673896091f604a2783ce6387
+
+
+###
+
+GET http://localhost:3000/posts/by-sender?sender=Yonatan
+
+###
