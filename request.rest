@@ -54,3 +54,16 @@ GET http://localhost:3000/comments
 GET http://localhost:3000/comments/posts/673896091f604a2783ce6387
 
 ###
+
+PUT http://localhost:3000/comments/673a185038de392dd531e44f
+Content-Type: application/json
+
+{
+    "content": "updated comment content"
+}
+
+###
+
+DELETE http://localhost:3000/comments/673a187138de392dd531e451
+
+###
