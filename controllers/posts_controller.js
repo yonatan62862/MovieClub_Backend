@@ -45,5 +45,35 @@ const getPostById = async (req,res) => {
   return res.status(400).send(err.message);
 };
 
+const createPost = async (req, res) => {
+  console.log(req.body);
+  try {
+    const post = await Posts.create(req.body);
+    res.status(201).send(post);
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+};
 
-module.exports = { getAllPosts, getPostsBySender, getPostById };
+//
+
+const updatePost = async (req,res) => {
+  const id = req.params.id;
+  const updatedData = req.body;
+    try {
+      const updatedPost = await Posts.findByIdAndUpdate(id, updatedData, {
+        new: true,
+        runValidators: true,
+      });
+
+      if (!updatedPost) {
+        return res.status(404).json({ message: "Post not found" });
+      } else {
+         return res.status(200).json(updatedPost);
+      }
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
+  };
+
+module.exports = { getAllPosts, createPost, getPostById, getPostsBySender, updatePost };
