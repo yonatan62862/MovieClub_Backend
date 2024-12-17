@@ -13,3 +13,23 @@ GET http://localhost:3000/posts/673896091f604a2783ce6387
 GET http://localhost:3000/posts/by-sender?sender=Yonatan
 
 ###
+
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+    "sender": "Yonatan",
+    "title": "My third post",
+    "content": "This is my third post"
+}
+
+###
+
+PUT http://localhost:3000/posts/673a2275ba0de1080f2a273b
+Content-Type: application/json
+
+{
+    "sender": "Yonatan",
+    "title": "My third post - update2",
+    "content": "This is the third updated content"
+}
