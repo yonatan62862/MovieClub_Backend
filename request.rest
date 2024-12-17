@@ -33,3 +33,24 @@ Content-Type: application/json
     "title": "My third post - update2",
     "content": "This is the third updated content"
 }
+
+###
+
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+    "content": "I really liked it!",
+    "postId": "673a2275ba0de1080f2a273b",
+    "sender": "Yonatan"
+}
+
+###
+
+GET http://localhost:3000/comments
+
+###
+
+GET http://localhost:3000/comments/posts/673896091f604a2783ce6387
+
+###

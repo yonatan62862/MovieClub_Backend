@@ -18,6 +18,9 @@ app.use(bodyParser.urlencoded({ extended: true}));
 const posts_routes = require("./routes/posts_routes");
 app.use("/posts", posts_routes);
 
+const commentsRoutes = require("./routes/comments_routes");
+app.use("/comments", commentsRoutes);
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
