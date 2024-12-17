@@ -1,7 +1,3 @@
-Assignment1-Web-Development
-
-Overview
-
 This project is a collaborative assignment completed by Bar and Yonatan. We developed a REST API using Node.js, Express, and MongoDB to manage Posts and Comments. The focus is on team collaboration using Git, with branches, pull requests, and code reviews.
 
 Project Description
