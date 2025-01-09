@@ -1,5 +1,5 @@
 const port = process.env.PORT || 3000;
-const appInit = require("./server");
+import appInit from "./server";
 
 const tmpFunc = async () => {
   const app = await appInit();

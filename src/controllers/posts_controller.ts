@@ -1,6 +1,8 @@
-const postModel = require("../models/posts_model");
+import postModel from "../models/posts_model";
+import { Request, Response } from "express";
 
-const getAllPosts = async (req, res) => {
+
+const getAllPosts = async (req: Request, res: Response) => {
   const ownerFilter = req.query.owner;
   try {
     if (ownerFilter) {
@@ -11,13 +13,13 @@ const getAllPosts = async (req, res) => {
       res.status(200).send(posts);
     }
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).send(error);
   }
 };
 
 
 
-const getPostById = async (req, res) => {
+const getPostById = async (req: Request, res: Response) => {
   const postId = req.params.id;
   try {
     const post = await postModel.findById(postId);
@@ -27,11 +29,11 @@ const getPostById = async (req, res) => {
       return res.status(200).send(post);
     }
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).send(error);
   }
 };
 
-const createPost = async (req, res) => {
+const createPost = async (req: Request, res: Response) => {
   const post = req.body;
   try {
     const newPost = await postModel.create(post);
@@ -41,7 +43,7 @@ const createPost = async (req, res) => {
   }
 };
 
-const deletePost = async (req, res) => {
+const deletePost = async (req: Request, res: Response) => {
   const postId = req.params.id;
   try {
     await postModel.findByIdAndDelete(postId);
@@ -51,7 +53,7 @@ const deletePost = async (req, res) => {
   }
 };
 
-const getPostsByOwner = async (req, res) => {
+const getPostsByOwner = async (req: Request, res: Response) => {
   try {
     const owner = req.query.owner;
 
@@ -62,12 +64,12 @@ const getPostsByOwner = async (req, res) => {
     const posts = await postModel.find({ owner });
     res.status(200).send(posts);
   } catch (error) {
-    console.error("Error fetching posts by owner:", error.message);
-    res.status(500).send({ message: error.message });
+    console.error("Error fetching posts by owner:", error);
+    res.status(500).send( error );
   }
 };
 
-const updatePost = async (req, res) => {
+const updatePost = async (req: Request, res: Response) => {
   const id = req.params.id;
   const updatedData = req.body;
   try {
@@ -81,13 +83,13 @@ const updatePost = async (req, res) => {
     } else {
       return res.status(200).json(updatedPost);
     }
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
+  } catch (error) {
+    return res.status(400).json(error);
   }
 };
 
 
-module.exports = {
+export default {
   getAllPosts,
   createPost,
   getPostById,

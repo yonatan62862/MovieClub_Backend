@@ -1,11 +1,23 @@
-const request = require("supertest");
-const appInit = require("../server");
-const mongoose = require("mongoose");
-const postsModel = require("../models/posts_model");
+import request from "supertest";
+import appInit from "../server";
+import mongoose from "mongoose";
+import postsModel from "../models/posts_model";
 
-const testPosts = require("./test_posts");
+import testPostsData from "./test_posts.json";
+import { Express } from "express";
 
-let app;
+let app: Express;
+
+type Post = {
+  _id?: string;
+  title: string;
+  content: string;
+  owner: string;
+};
+
+const testPosts: Post[] = testPostsData;
+
+
 beforeAll(async () => {
   console.log("Before all tests");
   app = await appInit();
@@ -26,7 +38,7 @@ describe("Posts Test", () => {
   });
 
   test("Test create new post", async () => {
-    for (let post of testPosts) {
+    for (const post of testPosts) {
       const response = await request(app).post("/posts").send(post);
       expect(response.statusCode).toBe(201);
       expect(response.body.title).toBe(post.title);
