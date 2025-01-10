@@ -2,17 +2,17 @@ import express from "express";
 const router = express.Router();
 import postsController from "../controllers/posts_controller";
 
-router.get("/by-owner",(req, res) => { postsController.getPostsByOwner(req, res); });
+router.get("/by-owner",(req, res) => { postsController.getByOwner(req, res); });
 
-router.get("/", postsController.getAllPosts);
+router.get("/", postsController.getAll.bind(postsController));
 
-router.get("/:id", (req, res) => { postsController.getPostById(req, res); });
+router.get("/:id", (req, res) => { postsController.getById(req, res); });
 
-router.post("/",postsController.createPost);
+router.post("/", postsController.create.bind(postsController));
 
-router.put("/:id", (req, res)  => { postsController.updatePost(req, res); });
+router.put("/:id", (req, res)  => { postsController.updateItem(req, res); });
 
-router.delete("/:id", postsController.deletePost);
+router.delete("/:id", postsController.deleteItem.bind(postsController));
 
 
 
