@@ -4,8 +4,9 @@ import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import postsRoute from "./routes/posts_routes";
+import postsRoutes from "./routes/posts_routes";
 import commentsRoutes from "./routes/comments_routes";
+import authRoutes from "./routes/auth_routes";
 
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
@@ -14,9 +15,10 @@ db.once("open", () => console.log("Connected to Database"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/posts", postsRoute);
-
+app.use("/posts", postsRoutes);
 app.use("/comments", commentsRoutes);
+app.use("/auth", authRoutes);
+
 
 app.get("/about", (req, res) => {
   res.send("Hello World!");
