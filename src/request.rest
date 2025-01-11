@@ -41,6 +41,16 @@ DELETE http://localhost:3000/posts
 
 ###
 
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "safasdfas",
+    "password": "dasfasdf",
+}
+
+###
+
 POST http://localhost:3000/comments
 Content-Type: application/json
 
