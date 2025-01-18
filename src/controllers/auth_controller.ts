@@ -5,19 +5,37 @@ import jwt from 'jsonwebtoken';
 import { Document } from 'mongoose';
 
 
-const register = async (req: Request, res: Response) => {
-    try {
-        const password = req.body.password;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await userModel.create({
-            email: req.body.email,
-            password: hashedPassword
-        });
-        res.status(200).send(user);
-    } catch (err) {
-        res.status(400).send("wrong email or password");
+async function register(req: Request, res: Response) {
+    
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (!email || !password) {
+        res.status(400).send({ error: 'missing required fields' });
+        return;
     }
-};
+    try {
+        const existingUser = await userModel.findOne({ email });
+        if (existingUser) {
+            res.status(400).send({ error: 'Email already in use' }); 
+             return;
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const user = await userModel.create({
+            email: email,
+            password: hashedPassword,
+        }); 
+        res.status(200).send(user);
+        return;
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(400).send(error);
+        return;
+    }
+}
+
 
 const generateTokens = (user: IUser): { accessToken: string, refreshToken: string } | null => {
     if (!process.env.TOKEN_SECRET) {
@@ -161,7 +179,7 @@ type Payload = {
     _id: string;
 }
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const authorization = req.headers.authorization;
+    const authorization = req.header("authorization");
     const token = authorization && authorization.split(" ")[1];
     if (!token) {
         res.status(401).send("Access Denied");
@@ -174,7 +192,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
         if (err) {
-            res.status(401).send("Access Denied");
+            res.status(403).send({error: "Access Denied"});
             return;
         }
         const userId = (payload as Payload)._id;
