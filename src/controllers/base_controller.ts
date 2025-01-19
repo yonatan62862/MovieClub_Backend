@@ -3,9 +3,11 @@ import { Model } from "mongoose";
 
 class BaseController<T> {
   model: Model<T>;
+
   constructor(model: Model<T>) {
     this.model = model;
   }
+
   async getAll(req: Request, res: Response) {
     const ownerFilter = req.query.owner;
     try {
@@ -17,71 +19,76 @@ class BaseController<T> {
         res.status(200).send(posts);
       }
     } catch (error) {
-      res.status(400).send(error);
+      res.status(500).send({ message: "An error occurred", details: error });
     }
-  };
+  }
+
   async getById(req: Request, res: Response) {
-    const postId = req.params.id;
+    const id = req.params.id;
     try {
-      const post = await this.model.findById(postId);
-      if (post === null) {
-        return res.status(404).send("not found");
-      } else {
-        return res.status(200).send(post);
+      const item = await this.model.findById(id);
+      if (!item) {
+        res.status(404).send({ message: "Item not found" });
+        return;
       }
+      res.status(200).send(item);
     } catch (error) {
-      res.status(400).send(error);
+      res.status(500).send({ message: "An error occurred", details: error });
     }
-  };
+  }
+
   async create(req: Request, res: Response) {
     const item = req.body;
     try {
       const newItem = await this.model.create(item);
       res.status(201).send(newItem);
     } catch (error) {
-      res.status(400).send(error);
+      res.status(400).send({ message: "Failed to create item", details: error });
     }
-  };
+  }
+
   async deleteItem(req: Request, res: Response) {
-    const itemId = req.params.id;
+    const id = req.params.id;
     try {
-      await this.model.findByIdAndDelete(itemId);
-      res.status(200).send();
-    } catch (error) {
-      res.status(400).send(error);
-    }
-  };
-     
-  async getByOwner (req: Request, res: Response) {
-    const owner = req.query.owner;
-    try {  
-      if (!owner) {
-        return res.status(400).send({ message: "Owner query parameter is required" });
+      const deletedItem = await this.model.findByIdAndDelete(id);
+      if (!deletedItem) {
+        res.status(404).send({ message: "Item not found" });
+        return;
       }
-  
+      res.status(200).send({ message: "Item deleted", item: deletedItem });
+    } catch (error) {
+      res.status(500).send({ message: "An error occurred", details: error });
+    }
+  }
+
+  async getByOwner(req: Request, res: Response) {
+    const owner = req.query.owner;
+    if (!owner) {
+      res.status(400).send({ message: "Owner query parameter is required" });
+      return;
+    }
+    try {
       const items = await this.model.find({ owner });
       res.status(200).send(items);
     } catch (error) {
-      res.status(500).send( error );
+      res.status(500).send({ message: "An error occurred", details: error });
     }
-  };
-  
+  }
+
   async updateItem(req: Request, res: Response) {
     const id = req.params.id;
-    const updatedData = req.body;
+    const updateData = req.body;
     try {
-      const updatedItem = await this.model.findByIdAndUpdate(id, updatedData, {
-        new: true,
-        runValidators: true,
-      });
-
+      const updatedItem = await this.model.findByIdAndUpdate(id, updateData, { new: true });
       if (!updatedItem) {
-        return res.status(404).send({ message: "Item not found" });
+        res.status(404).send({ message: "Item not found" });
+        return;
       }
       res.status(200).send(updatedItem);
     } catch (error) {
-      res.status(400).send(error);
+      res.status(500).send({ message: "An error occurred", details: error });
     }
   }
-};
+}
+
 export default BaseController;

@@ -179,27 +179,31 @@ type Payload = {
     _id: string;
 }
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const authorization = req.header("authorization");
-    const token = authorization && authorization.split(" ")[1];
+    const authorization = req.header("Authorization") || req.header("authorization");
+    const token = authorization?.split(" ")[1];
+
     if (!token) {
-        res.status(401).send("Access Denied");
+        res.status(401).send("Access Denied"); 
         return;
     }
+
     if (!process.env.TOKEN_SECRET) {
-        res.status(400).send("Server Error");
+        res.status(500).send("Server Error: TOKEN_SECRET is not defined");
         return;
     }
 
     jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
         if (err) {
-            res.status(403).send({error: "Access Denied"});
+            res.status(403).send({ error: "Access Denied" }); 
             return;
         }
-        const userId = (payload as Payload)._id;
+        const userId = (payload as { _id: string })._id;
         req.params.userId = userId;
         next();
     });
 };
+
+
 
 export default {
     register,

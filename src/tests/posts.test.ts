@@ -29,6 +29,10 @@ type Post = {
 
 const testPosts: Post[] = testPostsData;
 
+beforeEach(async () => {
+  await postModel.deleteMany({});
+});
+
 
 beforeAll(async () => {
   console.log("Before all tests");
@@ -41,6 +45,8 @@ beforeAll(async () => {
   testUser._id = response.body._id;
   expect(response.statusCode).toBe(200);
 });
+
+
 
 
 afterAll(() => {
