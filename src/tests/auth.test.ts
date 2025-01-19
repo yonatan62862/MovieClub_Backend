@@ -284,5 +284,15 @@ test("Get protected API invalid token", async () => {
       }
       expect(user.refreshToken).toContain(refreshToken);
   });
+  
+
+      test("Login fails without process.env.TOKEN_SECRET", async () => {
+        const originalSecret = process.env.TOKEN_SECRET;
+        delete process.env.TOKEN_SECRET;
+        const response = await request(app).post("/auth/login").send(testUser);
+        expect(response.statusCode).toBe(400);
+        process.env.TOKEN_SECRET = originalSecret; // Restore
+      });
+      
 
 });
