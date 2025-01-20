@@ -187,13 +187,7 @@ router.get("/:id", (req, res) => {
  *       500:
  *         description: Server error
  */
-router.put("/:id", authMiddleware, (req, res) => {
-    // Placeholder for updating a comment
-    res.status(200).json({
-        message: "Comment updated successfully",
-        updatedComment: req.body,
-    });
-});
+router.put('/:id', authMiddleware, commentsController.updateItem.bind(commentsController));
 
 /**
  * @swagger
