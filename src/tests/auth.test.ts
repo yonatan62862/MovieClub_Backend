@@ -80,7 +80,44 @@ describe("Auth Test", () => {
     });
     expect(response2.statusCode).not.toBe(200);
   });
-  
+   
+  test("Test Login with missing fields", async () => {
+    const response = await request(app).post("/auth" + "/login").send({
+        email: testUser.email,
+    });
+    expect(response.statusCode).not.toBe(200);
+});
+
+  test("Get protected API", async () => {
+    const responce = await request(app).post("/posts")
+    .send({
+        title: "Post 1 - without token",
+        content: "Content of post 1", 
+        owner: "Bar and Jonathan"
+    });
+    expect(responce.statusCode).not.toBe(201);
+
+    const response2 = await request(app).post("/posts")
+    .set({ authorization: "JWT " + testUser.accessToken })
+    .send({
+        title: "Post 2",
+        content: "Content of post 2", 
+        owner: "invalid owner"
+    });
+    expect(response2.statusCode).toBe(201);
+});
+
+test("Get protected API invalid token", async () => {
+  const responce = await request(app).post("/posts")
+  .set({ authorization: "JWT " + testUser.accessToken + '1' })
+  .send({
+      title: "Post 1 - without token",
+      content: "Content of post 1", 
+      owner: "Bar and Jonathan"
+  });
+  expect(responce.statusCode).not.toBe(201); 
+});
+
   test("Using token", async () => {
     const response = await request(app).post("/posts").send(testPosts[0]);
     expect(response.statusCode).not.toBe(201);
@@ -164,5 +201,98 @@ describe("Auth Test", () => {
       .send(testPosts[0]);
     expect(response3.statusCode).toBe(201);
   });
+
+  jest.setTimeout(20000);
+    test("Timeout on refresh access token", async() => {
+        const response = await request(app).post("/auth" + "/login")
+        .send({
+            email: testUser.email,
+            password: testUser.password,
+        });
+        expect(response.statusCode).toBe(200);
+        expect(response.body.accessToken).toBeDefined();
+        expect(response.body.refreshToken).toBeDefined();
+        testUser.accessToken = response.body.accessToken;
+        testUser.refreshToken = response.body.refreshToken;
+
+        await new Promise (resolve => setTimeout(resolve, 6000)); // wait for 6 seconds
+        const response2 = await request(app).post("/posts")
+        .set({ authorization: "JWT " + testUser.accessToken })
+        // try to access with expired token (5sec expiration)- fail
+        .send({
+            title: "Post 1 - without token",
+            content: "Content of post 1", 
+            owner: "Bar and Jonathan"
+        })
+        expect(response2.statusCode).not.toBe(201); 
+          
+        const response3 = await request(app).post("/auth" + "/refresh")
+        .send({
+            refreshToken: testUser.refreshToken
+        });
+        expect(response3.statusCode).toBe(200); 
+        testUser.accessToken = response3.body.accessToken;
+        testUser.refreshToken = response3.body.refreshToken;
+
+        const response4 = await request(app).post("/posts")
+        .set({ authorization: "JWT " + testUser.accessToken })
+        .send({
+            title: "Post 1 - without token",
+            content: "Content of post 1", 
+            owner: "Bar and Jonathan"
+        });
+        expect(response4.statusCode).toBe(201);
+    });
+    test("Test Login with missing fields", async () => {
+      const response = await request(app).post("/auth" + "/login").send({
+          email: testUser.email,
+      });
+      expect(response.statusCode).not.toBe(200);
+  });
+  test("Test Register with existing email", async () => {
+      const response = await request(app).post("/auth" + "/register").send(testUser);
+      expect(response.statusCode).not.toBe(200);
+  });
+ test("Test Login with wrong password", async () => {
+      const response = await request(app).post("/auth" + "/login").send({
+          email: testUser.email,
+          password: "12345679",
+      });
+      expect(response.statusCode).not.toBe(200);
+  });
+  test("Test Login with unregistered email", async () => {
+      const response = await request(app).post("/auth" + "/login").send({
+          email: "bobi1234@mail.com",
+          password: "12345678",
+      });
+      expect(response.statusCode).not.toBe(200);
+  });
+  test("Test authMiddleware with invalid token", async () => {
+      const response = await request(app).post("/posts")
+          .set({ authorization: "JWT invalidtoken123" })
+          .send({ title: "Test post" });
+      expect(response.statusCode).toBe(403);
+      expect(response.body.error).toBe("Access Denied");
+  });
+  test("Test refreshTokens array in user model", async () => {
+      const loginResponse = await request(app).post("/auth" + "/login").send(testUser);
+      const { refreshToken } = loginResponse.body;
+  
+      const user = await userModel.findOne({ email: testUser.email });
+      if(user === null) {
+          throw new Error("User not found");
+      }
+      expect(user.refreshToken).toContain(refreshToken);
+  });
+  
+
+      test("Login fails without process.env.TOKEN_SECRET", async () => {
+        const originalSecret = process.env.TOKEN_SECRET;
+        delete process.env.TOKEN_SECRET;
+        const response = await request(app).post("/auth/login").send(testUser);
+        expect(response.statusCode).toBe(400);
+        process.env.TOKEN_SECRET = originalSecret; // Restore
+      });
+      
 
 });

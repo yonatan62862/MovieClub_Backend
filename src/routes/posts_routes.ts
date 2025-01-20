@@ -1,18 +1,15 @@
-import express from "express";
+import express, { Request, Response } from 'express';
 const router = express.Router();
 import postsController from "../controllers/posts_controller";
 import { authMiddleware } from "../controllers/auth_controller";
 
-
-router.get("/by-owner",(req, res) => { postsController.getByOwner(req, res); });
-
-
 /**
-* @swagger
-* tags:
-*   name: Posts
-*   description: The Posts managing API
-*/
+ * @swagger
+ * tags:
+ *   name: Posts
+ *   description: The Posts managing API
+ */
+
 /**
  * @swagger
  * components:
@@ -25,27 +22,32 @@ router.get("/by-owner",(req, res) => { postsController.getByOwner(req, res); });
  *       properties:
  *         _id:
  *           type: string
+ *           description: The auto-generated ID of the post
  *           example: 60d0fe4f5311236168a109ca
  *         title:
  *           type: string
+ *           description: The title of the post
  *           example: My First Post
  *         content:
  *           type: string
+ *           description: The content of the post
  *           example: This is the content of the post.
  *         author:
  *           type: string
+ *           description: The author ID of the post
  *           example: 60d0fe4f5311236168a109ca
  */
+
 /**
  * @swagger
  * /posts:
  *   get:
  *     summary: Get all posts
- *     description: Retrieves a list of all posts
+ *     description: Retrieve a list of all posts
  *     tags:
  *       - Posts
  *     responses:
- *       '200':
+ *       200:
  *         description: A list of posts
  *         content:
  *           application/json:
@@ -53,46 +55,23 @@ router.get("/by-owner",(req, res) => { postsController.getByOwner(req, res); });
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Post'
- *       '500':
+ *       500:
  *         description: Internal server error
  */
-router.get("/", postsController.getAll.bind(postsController));
-
-/**
- * @swagger
- * /posts/{id}:
- *   get:
- *     summary: Get a post by ID
- *     description: Retrieves a post by its ID
- *     tags:
- *       - Posts
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The post ID
- *     responses:
- *       '200':
- *         description: A single post
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Post'
- *       '404':
- *         description: Post not found
- *       '500':
- *         description: Internal server error
- */
-router.get("/:id", (req, res) => { postsController.getById(req, res); });
+router.get('/', async (req: Request, res: Response) => {
+    if (req.query.owner) {
+        postsController.getByOwner.bind(postsController)(req, res);
+    } else {
+        postsController.getAll.bind(postsController)(req, res);
+    }
+});
 
 /**
  * @swagger
  * /posts:
  *   post:
  *     summary: Create a new post
- *     description: Creates a new post
+ *     description: Create a new post
  *     tags:
  *       - Posts
  *     security:
@@ -102,32 +81,68 @@ router.get("/:id", (req, res) => { postsController.getById(req, res); });
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Post'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the post
+ *               content:
+ *                 type: string
+ *                 description: The content of the post
+ *             required:
+ *               - title
+ *               - content
  *     responses:
- *       '201':
- *         description: The created post
+ *       201:
+ *         description: Post created successfully
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
- *       '400':
+ *       400:
  *         description: Invalid input
- *       '401':
- *         description: Unauthorized
- *       '500':
+ *       500:
  *         description: Internal server error
  */
-router.post("/", authMiddleware, postsController.create.bind(postsController));
-
-router.put("/:id", (req, res)  => { postsController.updateItem(req, res); });
-
+router.post('/', authMiddleware, postsController.create.bind(postsController));
 
 /**
  * @swagger
  * /posts/{id}:
- *   delete:
- *     summary: Delete a post by ID
- *     description: Deletes a post by its ID
+ *   get:
+ *     summary: Get a post by ID
+ *     description: Retrieve a single post by its ID
+ *     tags:
+ *       - Posts
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post
+ *     responses:
+ *       200:
+ *         description: A single post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/:id', (req: Request, res: Response) => {
+    postsController.getById.bind(postsController)(req, res);
+});
+
+/**
+ * @swagger
+ * /posts/{id}:
+ *   put:
+ *     summary: Update a post by ID
+ *     description: Update a post by its ID
  *     tags:
  *       - Posts
  *     security:
@@ -135,22 +150,59 @@ router.put("/:id", (req, res)  => { postsController.updateItem(req, res); });
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The post ID
+ *         required: true
+ *         description: The ID of the post
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Post'
  *     responses:
- *       '200':
- *         description: Post deleted successfully
- *       '401':
- *         description: Unauthorized
- *       '404':
- *         description: Post not found
- *       '500':
+ *       200:
+ *         description: Post updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       400:
+ *         description: Invalid input
+ *       500:
  *         description: Internal server error
  */
-router.delete("/:id", authMiddleware, postsController.deleteItem.bind(postsController));
+router.put('/:id', authMiddleware, (req: Request, res: Response) => {
+    postsController.updateItem.bind(postsController)(req, res);
+});
 
-
+/**
+ * @swagger
+ * /posts/{id}:
+ *   delete:
+ *     summary: Delete a post by ID
+ *     description: Delete a single post by its ID
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post
+ *     responses:
+ *       200:
+ *         description: Post deleted successfully
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/:id', authMiddleware, (req: Request, res: Response) => {
+    postsController.deleteItem.bind(postsController)(req, res);
+});
 
 export default router;
