@@ -30,10 +30,6 @@ app.use("/comments", commentsRoutes);
 app.use("/auth", authRoutes);
 
 
-app.get("/about", (req, res) => {
-  res.send("Hello World!");
-});
-
 const options = {
   definition: {
     openapi: "3.0.0",

@@ -92,7 +92,7 @@ const login = async (req: Request, res: Response) => {
                  refreshToken: tokens.refreshToken,
                  _id: user._id
              });
-     } catch (err) {
+     } catch {
          res.status(400).send("wrong email or password");
      }
     };
@@ -135,7 +135,7 @@ const login = async (req: Request, res: Response) => {
                 }
                 user.refreshToken = user.refreshToken.filter((token) => token !== refreshToken);
                 resolve(user);
-            } catch (err) {
+            } catch {
                 reject("Access Denied");
                 return;
             }
@@ -148,7 +148,7 @@ const logout = async (req: Request, res: Response) => {
         const user = await verifyAccessToken(req.body.refreshToken);
         await user.save();
         res.status(200).send("Logged out");
-    } catch (err) {
+    } catch {
         res.status(400).send("Access Denied");
         return;
     }
@@ -169,15 +169,13 @@ const refresh = async (req: Request, res: Response) => {
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken
         });
-    } catch (err) {
+    } catch {
         res.status(400).send("Access Denied");
         return;
     }
 };
 
-type Payload = {
-    _id: string;
-}
+
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authorization = req.header("Authorization") || req.header("authorization");
     const token = authorization?.split(" ")[1];
