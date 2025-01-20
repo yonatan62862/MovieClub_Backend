@@ -2,24 +2,29 @@ import request from "supertest";
 import appInit from "../server";
 import mongoose from "mongoose";
 import postModel from "../models/posts_model";
-
-import testPostsData from "./test_posts.json";
+import userModel from "../models/users_model";
 import { Express } from "express";
 
 let app: Express;
 
-type User = {
+/**
+ * Test user information
+ */
+type UserTemplate = {
   email: string;
   password: string;
   token?: string;
   _id?: string;
-}
+};
 
-const testUser: User = {
+const testUser: UserTemplate = {
   email: "user@test.com",
   password: "1234567",
-}
+};
 
+/**
+ * Test post structure
+ */
 type Post = {
   _id?: string;
   title: string;
@@ -27,14 +32,26 @@ type Post = {
   owner: string;
 };
 
-const testPosts: Post[] = testPostsData;
-
+const testPosts: Post[] = [
+  {
+    title: "Post 1",
+    content: "Content of post 1",
+    owner: "Test Owner",
+  },
+  {
+    title: "Post 2",
+    content: "Content of post 2",
+    owner: "Test Owner",
+  },
+];
 
 beforeAll(async () => {
-  console.log("Before all tests");
+  console.log("Initializing tests...");
   app = await appInit();
-  await postModel.deleteMany();
+  await userModel.deleteMany({});
+  await postModel.deleteMany({});
 
+  // Register and login user
   await request(app).post("/auth/register").send(testUser);
   const response = await request(app).post("/auth/login").send(testUser);
   testUser.token = response.body.token;
@@ -42,64 +59,121 @@ beforeAll(async () => {
   expect(response.statusCode).toBe(200);
 });
 
-
-afterAll(() => {
-  console.log("After all tests");
-  mongoose.connection.close();
+beforeEach(async () => {
+  await postModel.deleteMany({});
+  console.log("Cleared posts before each test");
 });
 
-describe("Posts Test", () => {
-  test("Test get all post empty", async () => {
+afterAll(async () => {
+  console.log("Closing database connection...");
+  await mongoose.connection.close();
+});
+
+describe("Posts API Tests", () => {
+  test("Get all posts (empty state)", async () => {
     const response = await request(app).get("/posts");
     expect(response.statusCode).toBe(200);
     expect(response.body.length).toBe(0);
   });
 
-  test("Test create new post", async () => {
-    for (const post of testPosts) {
-      const response = await request(app).post("/posts")
-        .set("authorization", "JWT " + testUser.token)
-        .send(post);      expect(response.statusCode).toBe(201);
-      expect(response.body.title).toBe(post.title);
-      expect(response.body.content).toBe(post.content);
-      post._id = response.body._id;
-    }
+  test("Create a new post", async () => {
+    const response = await request(app)
+      .post("/posts")
+      .set("authorization", `JWT ${testUser.token}`)
+      .send(testPosts[0]);
+
+    expect(response.statusCode).toBe(201);
+    expect(response.body.title).toBe(testPosts[0].title);
+    expect(response.body.content).toBe(testPosts[0].content);
+    testPosts[0]._id = response.body._id;
   });
 
-  test("Test get all post", async () => {
+  test("Get all posts", async () => {
+    await request(app)
+      .post("/posts")
+      .set("authorization", `JWT ${testUser.token}`)
+      .send(testPosts[0]);
+
     const response = await request(app).get("/posts");
     expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBe(testPosts.length);
+    expect(response.body.length).toBe(1);
   });
 
-  test("Test get post by id", async () => {
-    const response = await request(app).get("/posts/" + testPosts[0]._id);
+  test("Get post by ID", async () => {
+    const createResponse = await request(app)
+      .post("/posts")
+      .set("authorization", `JWT ${testUser.token}`)
+      .send(testPosts[0]);
+
+    const response = await request(app).get(`/posts/${createResponse.body._id}`);
     expect(response.statusCode).toBe(200);
-    expect(response.body._id).toBe(testPosts[0]._id);
+    expect(response.body._id).toBe(createResponse.body._id);
   });
 
-  test("Test filter post by owner", async () => {
-    const response = await request(app).get(
-      "/posts/by-owner?owner=" + testUser._id
-    );
+  test("Filter posts by owner", async () => {
+    await request(app)
+      .post("/posts")
+      .set("authorization", `JWT ${testUser.token}`)
+      .send(testPosts[0]);
+
+    const response = await request(app).get(`/posts/by-owner?owner=${testUser._id}`);
     expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBe(2);
+    expect(response.body.length).toBe(1);
   });
 
-  test("Test Delete post", async () => {
-    const response = await request(app).delete("/posts/" + testPosts[0]._id).set("authorization", "JWT " + testUser.token);
-    expect(response.statusCode).toBe(200);
+  test("Delete a post", async () => {
+    const createResponse = await request(app)
+      .post("/posts")
+      .set("authorization", `JWT ${testUser.token}`)
+      .send(testPosts[0]);
 
-    const responseGet = await request(app).get("/posts/" + testPosts[0]._id);
-    expect(responseGet.statusCode).toBe(404);
+    const deleteResponse = await request(app)
+      .delete(`/posts/${createResponse.body._id}`)
+      .set("authorization", `JWT ${testUser.token}`);
+
+    expect(deleteResponse.statusCode).toBe(200);
+
+    const getResponse = await request(app).get(`/posts/${createResponse.body._id}`);
+    expect(getResponse.statusCode).toBe(404);
   });
 
-  test("Test create new post fail", async () => {
-    const response = await request(app).post("/posts")
-    .set("authorization", "JWT " + testUser.token)
-    .send({
-      content: "Test Content 1",
-    });
+  test("Create a new post with missing fields (failure)", async () => {
+    const response = await request(app)
+      .post("/posts")
+      .set("authorization", `JWT ${testUser.token}`)
+      .send({ content: "Missing title" });
+
     expect(response.statusCode).toBe(400);
+  });
+
+  test("Update a post", async () => {
+    const createResponse = await request(app)
+      .post("/posts")
+      .set("authorization", `JWT ${testUser.token}`)
+      .send(testPosts[0]);
+
+    const updateResponse = await request(app)
+      .put(`/posts/${createResponse.body._id}`)
+      .set("authorization", `JWT ${testUser.token}`)
+      .send({
+        title: "Updated Title",
+        content: "Updated Content",
+      });
+
+    expect(updateResponse.statusCode).toBe(200);
+    expect(updateResponse.body.title).toBe("Updated Title");
+    expect(updateResponse.body.content).toBe("Updated Content");
+  });
+
+  test("Update a non-existing post (failure)", async () => {
+    const response = await request(app)
+      .put("/posts/nonexistent-id")
+      .set("authorization", `JWT ${testUser.token}`)
+      .send({
+        title: "Updated Title",
+        content: "Updated Content",
+      });
+
+    expect(response.statusCode).toBe(500);
   });
 });
