@@ -65,7 +65,7 @@ Content-Type: application/json
 
 POST http://localhost:3000/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjgyNTI2NzkyNjExMzc4NzIiLCJpYXQiOjE3NDIxNTExOTgsImV4cCI6MTc0MjE1NDc5OH0.Z_CpwbdBjrjkS8iu2rPAtWzndt05-ih4JwcfENzsnLY.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
 
 {
     "comment": "I really liked it!",
@@ -79,7 +79,7 @@ GET http://localhost:3000/comments
 
 ###
 
-GET http://localhost:3000/comments/posts/673896091f604a2783ce6387
+GET http://localhost:3000/comments/posts/67d6fbc3a6e78b58b46650c8
 
 ###
 
@@ -97,5 +97,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN
 
 DELETE http://localhost:3000/comments/678e65dc515319ecc52465fb
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
+
+###
+
+POST http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjU2MDMzMzE0MjMxMTMwNjMiLCJpYXQiOjE3NDIxNTA1NjAsImV4cCI6MTc0MjE1NDE2MH0.Q3DmeMiAdziWFglpxH7k7RyFjRBzEBDfBYGsE8cAW-I
+
+###
+
+GET http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8
+
+
+###
+
+DELETE http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjU2MDMzMzE0MjMxMTMwNjMiLCJpYXQiOjE3NDIxNTA1NjAsImV4cCI6MTc0MjE1NDE2MH0.Q3DmeMiAdziWFglpxH7k7RyFjRBzEBDfBYGsE8cAW-I
 
 ###

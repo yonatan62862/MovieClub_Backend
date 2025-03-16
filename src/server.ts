@@ -9,6 +9,8 @@ import commentsRoutes from "./routes/comments_routes";
 import authRoutes from "./routes/auth_routes";
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
+import likesRoutes from "./routes/likes_routes";
+
 
 
 const db = mongoose.connection;
@@ -28,6 +30,8 @@ app.use((req, res, next) => {
 app.use("/posts", postsRoutes);
 app.use("/comments", commentsRoutes);
 app.use("/auth", authRoutes);
+app.use("/likes", likesRoutes);
+
 
 
 const options = {
