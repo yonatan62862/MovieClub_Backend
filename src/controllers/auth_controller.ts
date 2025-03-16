@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
 import userModel, { IUser } from '../models/users_model';
 import bcrypt from 'bcrypt';
@@ -83,11 +82,12 @@ const login = async (req: Request, res: Response) => {
     }
 };
 
-type UserDocument = Document<unknown, {}, IUser> & IUser & Required<{
+type UserDocument = Document<unknown, object, IUser> & IUser & Required<{
     _id: string;
 }> & {
     __v: number;
 }
+
 
 const verifyAccessToken = (refreshToken: string | undefined) => {
     return new Promise<UserDocument>((resolve, reject) => {
@@ -117,7 +117,7 @@ const verifyAccessToken = (refreshToken: string | undefined) => {
                     reject("Access Denied");
                     return;
                 }
-                user.refreshToken = user.refreshToken.filter((token) => token !== refreshToken);
+                user.refreshToken = user.refreshToken.filter((token: string) => token !== refreshToken);
                 resolve(user);
             } catch (err) {
                 reject("Access Denied");
