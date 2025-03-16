@@ -13,22 +13,31 @@ GET http://localhost:3000/posts/678e6358515319ecc52465e9
 GET http://localhost:3000/posts/by-owner?owner=Yonatan
 
 ###
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "email": "yonatan@gmail.com",
+    "password": "123456"
+}
+
+###
 
 POST http://localhost:3000/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiYmVhYmIwMzY5Y2M0ZmQ0YmMwOGYiLCJyYW5kb20iOiIwLjgwNDk3ODM2MjEwODEyMjEiLCJpYXQiOjE3MzcyMTE3MDksImV4cCI6MTczODUwNzcwOX0.VPOA7D103ydPFaViHGDHx7RrE6y0AOyEqR_uiXaypYA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
 
 {
-    "owner": "Yonatan",
-    "title": "My first post",
-    "content": "This is my first post"
+    "title": "My second Post",
+    "content": "This is my second post"
 }
+
 
 ###
 
 PUT http://localhost:3000/posts/678e6514515319ecc52465f3
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiYmVhYmIwMzY5Y2M0ZmQ0YmMwOGYiLCJyYW5kb20iOiIwLjgwNDk3ODM2MjEwODEyMjEiLCJpYXQiOjE3MzcyMTE3MDksImV4cCI6MTczODUwNzcwOX0.VPOA7D103ydPFaViHGDHx7RrE6y0AOyEqR_uiXaypYA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
 
 {
     "owner": "Yonatan",
@@ -48,19 +57,19 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "safasdfas",
-    "password": "dasfasdf",
+    "email": "yonatan@gmail.com",
+    "password": "123456"
 }
 
 ###
 
 POST http://localhost:3000/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiYmVhYmIwMzY5Y2M0ZmQ0YmMwOGYiLCJyYW5kb20iOiIwLjgwNDk3ODM2MjEwODEyMjEiLCJpYXQiOjE3MzcyMTE3MDksImV4cCI6MTczODUwNzcwOX0.VPOA7D103ydPFaViHGDHx7RrE6y0AOyEqR_uiXaypYA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
 
 {
     "comment": "I really liked it!",
-    "postId": "678e640b515319ecc52465ef",
+    "postId": "67d6fbc3a6e78b58b46650c8",
     "owner": "Yonatan"
 }
 
@@ -76,7 +85,7 @@ GET http://localhost:3000/comments/posts/673896091f604a2783ce6387
 
 PUT http://localhost:3000/comments/678e65dc515319ecc52465fb
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiYmVhYmIwMzY5Y2M0ZmQ0YmMwOGYiLCJyYW5kb20iOiIwLjgwNDk3ODM2MjEwODEyMjEiLCJpYXQiOjE3MzcyMTE3MDksImV4cCI6MTczODUwNzcwOX0.VPOA7D103ydPFaViHGDHx7RrE6y0AOyEqR_uiXaypYA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
 
 {
     "comment": "updated comment succeed",
@@ -87,6 +96,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiYmVhY
 ###
 
 DELETE http://localhost:3000/comments/678e65dc515319ecc52465fb
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiYmVhYmIwMzY5Y2M0ZmQ0YmMwOGYiLCJyYW5kb20iOiIwLjgwNDk3ODM2MjEwODEyMjEiLCJpYXQiOjE3MzcyMTE3MDksImV4cCI6MTczODUwNzcwOX0.VPOA7D103ydPFaViHGDHx7RrE6y0AOyEqR_uiXaypYA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
 
 ###

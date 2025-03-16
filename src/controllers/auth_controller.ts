@@ -1,41 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
 import userModel, { IUser } from '../models/users_model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Document } from 'mongoose';
 
-
-async function register(req: Request, res: Response) {
-    
-    const email = req.body.email;
-    const password = req.body.password;
-
-    if (!email || !password) {
-        res.status(400).send({ error: 'missing required fields' });
-        return;
-    }
+const register = async (req: Request, res: Response) => {
     try {
-        const existingUser = await userModel.findOne({ email });
-        if (existingUser) {
-            res.status(400).send({ error: 'Email already in use' }); 
-             return;
-        }
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
+        const password = req.body.password;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        if (!req.body.avatar) req.body.avatar = null
         const user = await userModel.create({
-            email: email,
+            email: req.body.email,
             password: hashedPassword,
-        }); 
+            avatar: req.body.avatar
+        });
         res.status(200).send(user);
-        return;
-    } catch (error) {
-        console.error('Error creating user:', error);
-        res.status(400).send(error);
-        return;
+    } catch (err) {
+        res.status(400).send("wrong email or password");
     }
-}
-
+};
 
 const generateTokens = (user: IUser): { accessToken: string, refreshToken: string } | null => {
     if (!process.env.TOKEN_SECRET) {
@@ -49,6 +33,7 @@ const generateTokens = (user: IUser): { accessToken: string, refreshToken: strin
         },
         process.env.TOKEN_SECRET,
         { expiresIn: process.env.TOKEN_EXPIRE });
+
     const refreshToken = jwt.sign(
         {
             _id: user._id,
@@ -56,6 +41,7 @@ const generateTokens = (user: IUser): { accessToken: string, refreshToken: strin
         },
         process.env.TOKEN_SECRET,
         { expiresIn: process.env.REFRESH_TOKEN_EXPIRE });
+
     if (user.refreshToken == null) {
         user.refreshToken = [];
     }
@@ -79,42 +65,40 @@ const login = async (req: Request, res: Response) => {
             res.status(400).send("wrong email or password");
             return;
         }
-         //generate tokens
-         const tokens = generateTokens(user);
-         if (!tokens) {
-             res.status(400).send("Access Denied");
-             return;
-         }
-         await user.save();
-         res.status(200).send(
-             {
-                 accessToken: tokens.accessToken,
-                 refreshToken: tokens.refreshToken,
-                 _id: user._id
-             });
-     } catch {
-         res.status(400).send("wrong email or password");
-     }
-    };
-
-    type UserDocument = Document<unknown, {}, IUser> & IUser & Required<{
-     _id: string;
-    }> & {
-     __v: number;
+        //generate tokens
+        const tokens = generateTokens(user);
+        if (!tokens) {
+            res.status(400).send("Access Denied");
+            return;
+        }
+        await user.save();
+        res.status(200).send(
+            {
+                accessToken: tokens.accessToken,
+                refreshToken: tokens.refreshToken,
+                _id: user._id
+            });
+    } catch (err) {
+        res.status(400).send("wrong email or password");
     }
+};
 
- const verifyAccessToken = (refreshToken: string | undefined) => {
+type UserDocument = Document<unknown, {}, IUser> & IUser & Required<{
+    _id: string;
+}> & {
+    __v: number;
+}
+
+const verifyAccessToken = (refreshToken: string | undefined) => {
     return new Promise<UserDocument>((resolve, reject) => {
         if (!refreshToken) {
             reject("Access Denied");
             return;
         }
-
         if (!process.env.TOKEN_SECRET) {
             reject("Server Error");
             return;
         }
-
         jwt.verify(refreshToken, process.env.TOKEN_SECRET, async (err: any, payload: any) => {
             if (err) {
                 reject("Access Denied");
@@ -135,7 +119,7 @@ const login = async (req: Request, res: Response) => {
                 }
                 user.refreshToken = user.refreshToken.filter((token) => token !== refreshToken);
                 resolve(user);
-            } catch {
+            } catch (err) {
                 reject("Access Denied");
                 return;
             }
@@ -143,23 +127,29 @@ const login = async (req: Request, res: Response) => {
     });
 };
 
+
 const logout = async (req: Request, res: Response) => {
     try {
         const user = await verifyAccessToken(req.body.refreshToken);
+
         await user.save();
+
         res.status(200).send("Logged out");
-    } catch {
+    } catch (err) {
         res.status(400).send("Access Denied");
         return;
     }
 };
 
+
 const refresh = async (req: Request, res: Response) => {
     try {
         const user = await verifyAccessToken(req.body.refreshToken);
+
         //generate new tokens
         const tokens = generateTokens(user);
         await user.save();
+
         if (!tokens) {
             res.status(400).send("Access Denied");
             return;
@@ -169,43 +159,42 @@ const refresh = async (req: Request, res: Response) => {
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken
         });
-    } catch {
+    } catch (err) {
         res.status(400).send("Access Denied");
         return;
     }
 };
 
 
+type Payload = {
+    _id: string;
+}
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const authorization = req.header("Authorization") || req.header("authorization");
-    const token = authorization?.split(" ")[1];
-
+    const authorization = req.headers.authorization;
+    const token = authorization && authorization.split(" ")[1];
     if (!token) {
-        res.status(401).send("Access Denied"); 
+        res.status(401).send("Access Denied");
         return;
     }
-
     if (!process.env.TOKEN_SECRET) {
-        res.status(500).send("Server Error: TOKEN_SECRET is not defined");
+        res.status(400).send("Server Error");
         return;
     }
 
     jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
         if (err) {
-            res.status(403).send({ error: "Access Denied" }); 
+            res.status(401).send("Access Denied");
             return;
         }
-        const userId = (payload as { _id: string })._id;
+        const userId = (payload as Payload)._id;
         req.params.userId = userId;
         next();
     });
 };
-
-
 
 export default {
     register,
     login,
     logout,
     refresh
-}
+};
