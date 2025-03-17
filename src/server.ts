@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth_routes";
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import likesRoutes from "./routes/likes_routes";
+import cors from "cors";
 
 
 
@@ -26,6 +27,9 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "*");
   next();
 });
+
+app.use(cors());
+
 
 app.use("/posts", postsRoutes);
 app.use("/comments", commentsRoutes);
