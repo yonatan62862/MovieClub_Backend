@@ -5,13 +5,7 @@ import mongoose from "mongoose";
 
 export const addLike = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    if (!req.user) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-
-    const { targetType, targetId } = req.params;
-    const userId = req.user._id;
+    const { targetType, targetId, userId } = req.params;
 
     if (!["Post", "Comment"].includes(targetType)) {
       res.status(400).json({ error: "Invalid target type" });
@@ -41,13 +35,8 @@ export const addLike = async (req: Request, res: Response, next: NextFunction): 
 
 export const removeLike = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    if (!req.user) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-
-    const { targetType, targetId } = req.params;
-    const userId = req.user._id;
+    
+    const { targetType, targetId, userId } = req.params;
 
     const deletedLike = await Like.findOneAndDelete({ targetType, targetId, userId });
 

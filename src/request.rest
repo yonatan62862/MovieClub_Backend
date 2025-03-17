@@ -1,18 +1,23 @@
 
 ###
+// get all posts
 
 GET http://localhost:3000/posts
 
 ###
+// get post by id
 
-GET http://localhost:3000/posts/678e6358515319ecc52465e9
+GET http://localhost:3000/posts/67d7f1eb97b499281271862c
 
 
 ###
+// get post by owner
 
 GET http://localhost:3000/posts/by-owner?owner=Yonatan
 
 ###
+// register
+
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
@@ -22,22 +27,24 @@ Content-Type: application/json
 }
 
 ###
+// create new post
 
 POST http://localhost:3000/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
 
 {
-    "title": "My second Post",
-    "content": "This is my second post"
+    "title": "New Post",
+    "content": "This is a new post"
 }
 
 
 ###
+// update post by id
 
-PUT http://localhost:3000/posts/678e6514515319ecc52465f3
+PUT http://localhost:3000/posts/67d7f1eb97b499281271862c
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
 
 {
     "owner": "Yonatan",
@@ -46,12 +53,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN
 }
 
 ###
-
+// delete post by id
 
 DELETE http://localhost:3000/posts/678e6358515319ecc52465e9
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiYmVhYmIwMzY5Y2M0ZmQ0YmMwOGYiLCJyYW5kb20iOiIwLjgwNDk3ODM2MjEwODEyMjEiLCJpYXQiOjE3MzcyMTE3MDksImV4cCI6MTczODUwNzcwOX0.VPOA7D103ydPFaViHGDHx7RrE6y0AOyEqR_uiXaypYA
 
 ###
+// login
 
 POST http://localhost:3000/auth/login
 Content-Type: application/json
@@ -62,10 +70,11 @@ Content-Type: application/json
 }
 
 ###
+// add new comment to post
 
 POST http://localhost:3000/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjgyNTI2NzkyNjExMzc4NzIiLCJpYXQiOjE3NDIxNTExOTgsImV4cCI6MTc0MjE1NDc5OH0.Z_CpwbdBjrjkS8iu2rPAtWzndt05-ih4JwcfENzsnLY.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
 
 {
     "comment": "I really liked it!",
@@ -74,18 +83,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5Z
 }
 
 ###
+// get all comments
 
 GET http://localhost:3000/comments
 
 ###
+// get all specific post comments
 
 GET http://localhost:3000/comments/posts/67d6fbc3a6e78b58b46650c8
 
 ###
+// update comment by id
 
-PUT http://localhost:3000/comments/678e65dc515319ecc52465fb
+PUT http://localhost:3000/comments/67d7f45897b4992812718639
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
 
 {
     "comment": "updated comment succeed",
@@ -94,23 +106,27 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN
 }
 
 ###
+// delete comment by id
 
-DELETE http://localhost:3000/comments/678e65dc515319ecc52465fb
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZjhhN2NjNThhYzE3ZWE3MTU2MjEiLCJyYW5kb20iOiIwLjMzMzkxMTg5NjQ2NjE0Njk0IiwiaWF0IjoxNzQyMTQxNzY5LCJleHAiOjE3NDIxNDUzNjl9.3jkY8DBRwS1wB53wqxzEI38XPwwXTlHLOVZuZzWzimc
-
-###
-
-POST http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjU2MDMzMzE0MjMxMTMwNjMiLCJpYXQiOjE3NDIxNTA1NjAsImV4cCI6MTc0MjE1NDE2MH0.Q3DmeMiAdziWFglpxH7k7RyFjRBzEBDfBYGsE8cAW-I
+DELETE http://localhost:3000/comments/67d6fc2aa6e78b58b46650cb
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
 
 ###
+// add like to post
+
+POST http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8/67d6fd9da6e78b58b46650d3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjExNjkwMDk1NjI4NTg2NjcyIiwiaWF0IjoxNzQyMjEzMzQxLCJleHAiOjE3NDIyOTk3NDF9.g9BCvBSdjsuOSUBoVmsOnxAefUpyPUAZMfCLNuPiWxY
+
+###
+// get all likes in specific post
 
 GET http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8
 
 
 ###
+// delete like 
 
-DELETE http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjU2MDMzMzE0MjMxMTMwNjMiLCJpYXQiOjE3NDIxNTA1NjAsImV4cCI6MTc0MjE1NDE2MH0.Q3DmeMiAdziWFglpxH7k7RyFjRBzEBDfBYGsE8cAW-I
+DELETE http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8/67d6fd9da6e78b58b46650d3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjExNjkwMDk1NjI4NTg2NjcyIiwiaWF0IjoxNzQyMjEzMzQxLCJleHAiOjE3NDIyOTk3NDF9.g9BCvBSdjsuOSUBoVmsOnxAefUpyPUAZMfCLNuPiWxY
 
 ###
