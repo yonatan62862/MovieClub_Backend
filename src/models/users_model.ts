@@ -6,6 +6,7 @@ export interface IUser {
   password: string;
   _id?: string;
   refreshToken?: string[];
+  avatar?: string;
 }
 
 const userSchema = new Schema<IUser>({
@@ -21,6 +22,9 @@ const userSchema = new Schema<IUser>({
   refreshToken: {
     type: [String],
     default: [],
+  },
+  avatar: {
+    type: String,
   },
 });
 
