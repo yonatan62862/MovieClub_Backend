@@ -11,7 +11,10 @@ import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import likesRoutes from "./routes/likes_routes";
 import cors from "cors";
+import passport from "passport";
+import "./services/passport"; 
 
+app.use(passport.initialize());
 
 
 const db = mongoose.connection;

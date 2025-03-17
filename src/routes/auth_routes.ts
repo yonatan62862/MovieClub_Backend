@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import authController from "../controllers/auth_controller";
+import passport from "passport";
 
 /**
 * @swagger
@@ -173,6 +174,20 @@ router.post("/logout", authController.logout);
  *         description: Internal server error
  */
 router.post("/refresh", authController.refresh);
+
+
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  (req, res) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const user = req.user as any;
+    const token = user.token;
+    res.redirect(`http://localhost:5001/home?token=${token}`);
+  }
+);
 
 
 export default router;
