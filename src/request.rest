@@ -1,0 +1,132 @@
+
+###
+// get all posts
+
+GET http://localhost:3000/posts
+
+###
+// get post by id
+
+GET http://localhost:3000/posts/67d7f1eb97b499281271862c
+
+
+###
+// get post by owner
+
+GET http://localhost:3000/posts/by-owner?owner=Yonatan
+
+###
+// register
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "email": "yonatan@gmail.com",
+    "password": "123456"
+}
+
+###
+// create new post
+
+POST http://localhost:3000/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
+
+{
+    "title": "New Post",
+    "content": "This is a new post"
+}
+
+
+###
+// update post by id
+
+PUT http://localhost:3000/posts/67d7f1eb97b499281271862c
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
+
+{
+    "owner": "Yonatan",
+    "title": "My third post - update333",
+    "content": "This is the third updated content"
+}
+
+###
+// delete post by id
+
+DELETE http://localhost:3000/posts/678e6358515319ecc52465e9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiYmVhYmIwMzY5Y2M0ZmQ0YmMwOGYiLCJyYW5kb20iOiIwLjgwNDk3ODM2MjEwODEyMjEiLCJpYXQiOjE3MzcyMTE3MDksImV4cCI6MTczODUwNzcwOX0.VPOA7D103ydPFaViHGDHx7RrE6y0AOyEqR_uiXaypYA
+
+###
+// login
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "yonatan@gmail.com",
+    "password": "123456"
+}
+
+###
+// add new comment to post
+
+POST http://localhost:3000/comments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
+
+{
+    "comment": "I really liked it!",
+    "postId": "67d6fbc3a6e78b58b46650c8",
+    "owner": "Yonatan"
+}
+
+###
+// get all comments
+
+GET http://localhost:3000/comments
+
+###
+// get all specific post comments
+
+GET http://localhost:3000/comments/posts/67d6fbc3a6e78b58b46650c8
+
+###
+// update comment by id
+
+PUT http://localhost:3000/comments/67d7f45897b4992812718639
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
+
+{
+    "comment": "updated comment succeed",
+    "owner": "Yonatan",
+    "postId": "678e640b515319ecc52465ef"
+}
+
+###
+// delete comment by id
+
+DELETE http://localhost:3000/comments/67d6fc2aa6e78b58b46650cb
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
+
+###
+// add like to post
+
+POST http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8/67d6fd9da6e78b58b46650d3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjExNjkwMDk1NjI4NTg2NjcyIiwiaWF0IjoxNzQyMjEzMzQxLCJleHAiOjE3NDIyOTk3NDF9.g9BCvBSdjsuOSUBoVmsOnxAefUpyPUAZMfCLNuPiWxY
+
+###
+// get all likes in specific post
+
+GET http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8
+
+
+###
+// delete like 
+
+DELETE http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8/67d6fd9da6e78b58b46650d3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjExNjkwMDk1NjI4NTg2NjcyIiwiaWF0IjoxNzQyMjEzMzQxLCJleHAiOjE3NDIyOTk3NDF9.g9BCvBSdjsuOSUBoVmsOnxAefUpyPUAZMfCLNuPiWxY
+
+###
