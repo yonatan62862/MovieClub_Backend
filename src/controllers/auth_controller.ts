@@ -14,7 +14,7 @@ const register = async (req: Request, res: Response) => {
             password: hashedPassword,
             avatar: req.body.avatar
         });
-        res.status(200).send(user);
+        res.status(201).send(user);
     } catch (err) {
         console.log(err)
         res.status(400).send("wrong email or password");
@@ -103,6 +103,7 @@ const verifyAccessToken = (refreshToken: string | undefined) => {
             reject("Server Error");
             return;
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         jwt.verify(refreshToken, process.env.TOKEN_SECRET, async (err: any, payload: any) => {
             if (err) {
                 reject("Access Denied");
@@ -172,10 +173,55 @@ const refresh = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * Get user profile by ID
+ */
+export const getProfile = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const user = await userModel.findById(id).select("-password"); 
+  
+      if (!user) {
+        res.status(404).json({ message: "User not found" });
+      }
+  
+       res.status(200).json(user);
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  
+  /**
+   * Update user profile picture
+   */
+  export const updateProfile = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const { profilePicture } = req.body;
+  
+      const user = await userModel.findByIdAndUpdate(id, { profilePicture }, { new: true });
+  
+      if (!user) {
+        res.status(404).json({ message: "User not found" });
+      }
+  
+     res.status(200).json({ message: "Profile updated successfully", user });
+    } catch (error) {
+      console.error("Error updating profile:", error);
+       res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  
+
+
+
 
 export default {
     register,
     login,
     logout,
-    refresh
+    refresh,
+    getProfile,
+    updateProfile
 };

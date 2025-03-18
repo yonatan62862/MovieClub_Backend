@@ -6,7 +6,7 @@ export interface IUser {
   password: string;
   _id?: string;
   refreshToken?: string[];
-  avatar?: string;
+  profilePicture?: string;
 }
 
 const userSchema = new Schema<IUser>({
@@ -23,8 +23,8 @@ const userSchema = new Schema<IUser>({
     type: [String],
     default: [],
   },
-  avatar: {
-    type: String,
+  profilePicture: {
+    profilePicture: { type: String, default: "https://via.placeholder.com/150" }, 
   },
 });
 

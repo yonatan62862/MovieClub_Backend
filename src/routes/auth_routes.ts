@@ -1,7 +1,10 @@
-import express from "express";
-const router = express.Router();
+import express, { RequestHandler } from "express";
 import authController from "../controllers/auth_controller";
 import passport from "passport";
+import multer from "multer";
+
+const router = express.Router();
+
 
 /**
 * @swagger
@@ -61,7 +64,7 @@ import passport from "passport";
 *             schema:
 *               $ref: '#/components/schemas/User'
 */
-router.post("/register", authController.register);
+router.post("/register", authController.register as RequestHandler);
 
 
 
@@ -101,7 +104,7 @@ router.post("/register", authController.register);
  *       '500':
  *         description: Internal server error
  */
-router.post("/login", authController.login);
+router.post("/login", authController.login as RequestHandler);
 
 
 /**
@@ -132,7 +135,7 @@ router.post("/login", authController.login);
  *       '500':
  *         description: Internal server error
  */
-router.post("/logout", authController.logout);
+router.post("/logout", authController.logout as RequestHandler);
 
 /**
  * @swagger
@@ -173,7 +176,9 @@ router.post("/logout", authController.logout);
  *       '500':
  *         description: Internal server error
  */
-router.post("/refresh", authController.refresh);
+router.post("/refresh", authController.refresh as RequestHandler);
+
+
 
 
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
@@ -188,6 +193,74 @@ router.get(
     res.redirect(`http://localhost:5001/home?token=${token}`);
   }
 );
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "uploads/");
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
+  const upload = multer({ storage });
+  
+  /**
+   * @swagger
+   * /auth/profile/{id}:
+   *   get:
+   *     summary: Get user profile
+   *     description: Retrieve the profile details of a user by their ID
+   *     tags:
+   *       - Auth
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: User ID
+   *     responses:
+   *       '200':
+   *         description: User profile data
+   *       '404':
+   *         description: User not found
+   */
+  router.get("/profile/:id", authController.getProfile as RequestHandler);
+  
+  /**
+   * @swagger
+   * /auth/profile/{id}:
+   *   put:
+   *     summary: Update user profile
+   *     description: Allows the user to update their profile picture
+   *     tags:
+   *       - Auth
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: User ID
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         multipart/form-data:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               profilePicture:
+   *                 type: string
+   *                 format: binary
+   *     responses:
+   *       '200':
+   *         description: Profile updated successfully
+   *       '400':
+   *         description: Invalid input
+   *       '404':
+   *         description: User not found
+   */
+  router.put("/profile/:id", upload.single("profilePicture"), authController.updateProfile as RequestHandler);
 
 
 export default router;
