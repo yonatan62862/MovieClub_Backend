@@ -1,70 +1,3 @@
-<<<<<<< HEAD
-import express from "express";
-const router = express.Router();
-import authController from "../controllers/auth_controller";
-
-/**
-* @swagger
-* tags:
-*   name: Auth
-*   description: The Authentication API
-*/
-
-/**
-* @swagger
-* components:
-*   securitySchemes:
-*     bearerAuth:
-*       type: http
-*       scheme: bearer
-*       bearerFormat: JWT
-*/
-
-/**
-* @swagger
-* components:
-*   schemas:
-*     User:
-*       type: object
-*       required:
-*         - email
-*         - password
-*       properties:
-*         email:
-*           type: string
-*           description: The user email
-*         password:
-*           type: string
-*           description: The user password
-*       example:
-*         email: 'bob@gmail.com'
-*         password: '123456'
-*/
-
-/**
-* @swagger
-* /auth/register:
-*   post:
-*     summary: registers a new user
-*     tags: [Auth]
-*     requestBody:
-*       required: true
-*       content:
-*         application/json:
-*           schema:
-*             $ref: '#/components/schemas/User'
-*     responses:
-*       200:
-*         description: The new user
-*         content:
-*           application/json:
-*             schema:
-*               $ref: '#/components/schemas/User'
-*/
-router.post("/register", authController.register);
-
-
-=======
 import express, { RequestHandler } from "express";
 import authController from "../controllers/auth_controller";
 import passport from "passport";
@@ -131,7 +64,6 @@ const router = express.Router();
  *               $ref: '#/components/schemas/User'
  */
 router.post("/register", authController.register as RequestHandler);
->>>>>>> server_branch
 
 /**
  * @swagger
@@ -169,12 +101,7 @@ router.post("/register", authController.register as RequestHandler);
  *       '500':
  *         description: Internal server error
  */
-<<<<<<< HEAD
-router.post("/login", authController.login);
-
-=======
 router.post("/login", authController.login as RequestHandler);
->>>>>>> server_branch
 
 /**
  * @swagger
@@ -204,11 +131,7 @@ router.post("/login", authController.login as RequestHandler);
  *       '500':
  *         description: Internal server error
  */
-<<<<<<< HEAD
-router.post("/logout", authController.logout);
-=======
 router.post("/logout", authController.logout as RequestHandler);
->>>>>>> server_branch
 
 /**
  * @swagger
@@ -249,12 +172,6 @@ router.post("/logout", authController.logout as RequestHandler);
  *       '500':
  *         description: Internal server error
  */
-<<<<<<< HEAD
-router.post("/refresh", authController.refresh);
-
-
-export default router;
-=======
 router.post("/refresh", authController.refresh as RequestHandler);
 
 router.get(
@@ -346,4 +263,3 @@ router.put(
 );
 
 export default router;
->>>>>>> server_branch
