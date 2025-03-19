@@ -1,13 +1,10 @@
-import express from "express";
-import asyncHandler from "express-async-handler";
-import { addLike, removeLike, getLikesCount } from "../controllers/likes_controller";
-import { authMiddleware } from "../middlewares/auth_middleware"; 
+import express, { RequestHandler } from "express";
+import {
+    toggleLike
+} from "../controllers/likes_controller";
 
 const router = express.Router();
+router.put("/:targetType/:targetId/:userId", toggleLike as RequestHandler);
 
-router.post("/:targetType/:targetId/:userId", authMiddleware, asyncHandler(addLike));
-router.delete("/:targetType/:targetId/:userId", authMiddleware, asyncHandler(removeLike));
-router.get("/:targetType/:targetId", asyncHandler(getLikesCount));
 
 export default router;
-

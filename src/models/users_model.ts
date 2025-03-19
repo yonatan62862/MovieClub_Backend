@@ -34,13 +34,11 @@ const userSchema = new Schema<IUser>({
     default: [],
   },
   profilePicture: {
-    profilePicture: {
-      type: String,
-      default: "https://via.placeholder.com/150",
-    },
+    type: String,
+    default: "https://via.placeholder.com/150",
   },
 });
 
-const userModel = mongoose.model<IUser>("Users", userSchema);
+const userModel = mongoose.model<IUser>("User", userSchema, "users");
 
 export default userModel;
