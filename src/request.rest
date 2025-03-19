@@ -7,7 +7,7 @@ GET http://localhost:3000/posts
 ###
 // get post by id
 
-GET http://localhost:3000/posts/67d7f1eb97b499281271862c
+GET http://localhost:3000/posts/67dab26013ef367c8f1c6288
 
 
 ###
@@ -22,8 +22,10 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email": "yonatan@gmail.com",
-    "password": "123456"
+    "email": "loca@gmail.com",
+    "password": "123456",
+    "firstName":"Loca",
+    "lastName":"Moradi"
 }
 
 ###
@@ -31,11 +33,12 @@ Content-Type: application/json
 
 POST http://localhost:3000/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2RhYzFkZWQ3YWY0OGY5M2Q3MzRmMTkiLCJyYW5kb20iOiIwLjI2NzYyNjY2NjAzODkwOTciLCJpYXQiOjE3NDIzODk3MjYsImV4cCI6MTc0MjQ3NjEyNn0.g41nVd3SPRDxJwik2W7PcD_3LysrW2Zfoqn5Zy30eWw
 
 {
-    "title": "New Post",
-    "content": "This is a new post"
+    "title": "Lory is in the town",
+    "content": "testing",
+    "owner":"67dac1ded7af48f93d734f19"
 }
 
 
@@ -65,7 +68,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "yonatan@gmail.com",
+    "email": "yoni@gmail.com",
     "password": "123456"
 }
 
@@ -74,11 +77,11 @@ Content-Type: application/json
 
 POST http://localhost:3000/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YjAzMjk2YzkwNDc2Y2Q2MjJjYWEiLCJyYW5kb20iOiIwLjE4NDU2NjEyNTk0NjM2NTgiLCJpYXQiOjE3NDIzMjg5NDIsImV4cCI6MTc0MjQxNTM0Mn0.Y0Z3eCu-_NFXV4DFG3V8d_1V4cj5iet9bK4wgGkV1SQ
 
 {
     "comment": "I really liked it!",
-    "postId": "67d6fbc3a6e78b58b46650c8",
+    "postId": "67d9d49261671718645826c7",
     "owner": "Yonatan"
 }
 
@@ -114,8 +117,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5Z
 ###
 // add like to post
 
-POST http://localhost:3000/likes/Post/67d6fbc3a6e78b58b46650c8/67d6fd9da6e78b58b46650d3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjExNjkwMDk1NjI4NTg2NjcyIiwiaWF0IjoxNzQyMjEzMzQxLCJleHAiOjE3NDIyOTk3NDF9.g9BCvBSdjsuOSUBoVmsOnxAefUpyPUAZMfCLNuPiWxY
+POST http://localhost:3000/likes/Post/67d9d49261671718645826c7/67d9b03296c90476cd622caa
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YjAzMjk2YzkwNDc2Y2Q2MjJjYWEiLCJyYW5kb20iOiIwLjE4NDU2NjEyNTk0NjM2NTgiLCJpYXQiOjE3NDIzMjg5NDIsImV4cCI6MTc0MjQxNTM0Mn0.Y0Z3eCu-_NFXV4DFG3V8d_1V4cj5iet9bK4wgGkV1SQ
 
 ###
 // get all likes in specific post

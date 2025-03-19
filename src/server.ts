@@ -10,8 +10,8 @@ import authRoutes from "./routes/auth_routes";
 import commentsRoutes from "./routes/comments_routes";
 import likesRoutes from "./routes/likes_routes";
 import postsRoutes from "./routes/posts_routes";
-import "./services/passport";
 import userRoutes from "./routes/user_routes";
+import "./services/passport";
 const app = express();
 dotenv.config();
 
@@ -29,6 +29,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Headers", "*");
+
   next();
 });
 
