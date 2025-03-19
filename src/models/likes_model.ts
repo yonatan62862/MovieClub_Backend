@@ -2,8 +2,8 @@ import mongoose, { Document, Schema, model } from "mongoose";
 
 export interface ILike extends Document {
   targetType: "Post" | "Comment";
-  targetId: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
+  targetId: mongoose.Types.ObjectId;
 }
 
 const LikeSchema = new Schema<ILike>(
@@ -26,7 +26,7 @@ const LikeSchema = new Schema<ILike>(
   },
   {
     versionKey: false,
-    timestamps: true, 
+    timestamps: true,
   }
 );
 
