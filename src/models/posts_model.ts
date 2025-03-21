@@ -18,7 +18,7 @@ export interface IPost {
 const postSchema = new Schema<IPost>(
   {
     title: { type: String, required: true },
-    content: String,
+      content: String,
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
