@@ -54,7 +54,7 @@ class BaseController<T> {
       const item = await this.model.create(body);
       res.status(201).send(item);
     } catch (error) {
-      res.status(400).send(error);
+      res.status(400).send(body);
     }
   }
 

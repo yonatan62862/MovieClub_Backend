@@ -33,11 +33,11 @@ Content-Type: application/json
 
 POST http://localhost:3000/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2RhYzFkZWQ3YWY0OGY5M2Q3MzRmMTkiLCJyYW5kb20iOiIwLjI2NzYyNjY2NjAzODkwOTciLCJpYXQiOjE3NDIzODk3MjYsImV4cCI6MTc0MjQ3NjEyNn0.g41nVd3SPRDxJwik2W7PcD_3LysrW2Zfoqn5Zy30eWw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YzRkMjQxNDFhODQ1MDU2YzllM2IiLCJyYW5kb20iOiIwLjU2MjgzMjEzMTgwNzc5NTEiLCJpYXQiOjE3NDI1NDkzNzcsImV4cCI6MTc0MjYzNTc3N30.Ah9pLkMNMII9q-FRYSoyTKTIM--g12cpXbWv8KeB7k8
 
 {
-    "title": "Lory is in the town",
-    "content": "testing",
+    "title": "Movie name",
+    "content": "content",
     "owner":"67dac1ded7af48f93d734f19"
 }
 
@@ -47,7 +47,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2RhYzFkZ
 
 PUT http://localhost:3000/posts/67d7f1eb97b499281271862c
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YzRkMjQxNDFhODQ1MDU2YzllM2IiLCJyYW5kb20iOiIwLjU2MjgzMjEzMTgwNzc5NTEiLCJpYXQiOjE3NDI1NDkzNzcsImV4cCI6MTc0MjYzNTc3N30.Ah9pLkMNMII9q-FRYSoyTKTIM--g12cpXbWv8KeB7k8
 
 {
     "owner": "Yonatan",
@@ -59,7 +59,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5Z
 // delete post by id
 
 DELETE http://localhost:3000/posts/678e6358515319ecc52465e9
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiYmVhYmIwMzY5Y2M0ZmQ0YmMwOGYiLCJyYW5kb20iOiIwLjgwNDk3ODM2MjEwODEyMjEiLCJpYXQiOjE3MzcyMTE3MDksImV4cCI6MTczODUwNzcwOX0.VPOA7D103ydPFaViHGDHx7RrE6y0AOyEqR_uiXaypYA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YzRkMjQxNDFhODQ1MDU2YzllM2IiLCJyYW5kb20iOiIwLjU2MjgzMjEzMTgwNzc5NTEiLCJpYXQiOjE3NDI1NDkzNzcsImV4cCI6MTc0MjYzNTc3N30.Ah9pLkMNMII9q-FRYSoyTKTIM--g12cpXbWv8KeB7k8
 
 ###
 // login
@@ -68,8 +68,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "yoni@gmail.com",
-    "password": "123456"
+    "email": "Bar@gmail.com",
+    "password": "2004"
 }
 
 ###
@@ -77,7 +77,7 @@ Content-Type: application/json
 
 POST http://localhost:3000/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YjAzMjk2YzkwNDc2Y2Q2MjJjYWEiLCJyYW5kb20iOiIwLjE4NDU2NjEyNTk0NjM2NTgiLCJpYXQiOjE3NDIzMjg5NDIsImV4cCI6MTc0MjQxNTM0Mn0.Y0Z3eCu-_NFXV4DFG3V8d_1V4cj5iet9bK4wgGkV1SQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YzRkMjQxNDFhODQ1MDU2YzllM2IiLCJyYW5kb20iOiIwLjU2MjgzMjEzMTgwNzc5NTEiLCJpYXQiOjE3NDI1NDkzNzcsImV4cCI6MTc0MjYzNTc3N30.Ah9pLkMNMII9q-FRYSoyTKTIM--g12cpXbWv8KeB7k8
 
 {
     "comment": "I really liked it!",
@@ -100,10 +100,9 @@ GET http://localhost:3000/comments/posts/67d6fbc3a6e78b58b46650c8
 
 PUT http://localhost:3000/comments/67d7f45897b4992812718639
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q2ZmQ5ZGE2ZTc4YjU4YjQ2NjUwZDMiLCJyYW5kb20iOiIwLjY3NzIxNjQ1ODU5OTQ2NjkiLCJpYXQiOjE3NDIyMDUzNzQsImV4cCI6MTc0MjIwODk3NH0.qZAArw4sXNct65Ikp7mQOFUGZ_tRSAKk0soqV1rU1fw
-
-{
-    "comment": "updated comment succeed",
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YzRkMjQxNDFhODQ1MDU2YzllM2IiLCJyYW5kb20iOiIwLjU2MjgzMjEzMTgwNzc5NTEiLCJpYXQiOjE3NDI1NDkzNzcsImV4cCI6MTc0MjYzNTc3N30.Ah9pLkMNMII9q-FRYSoyTKTIM--g12cpXbWv8KeB7k8
+ 
+{   "comment": "updated comment succeed",
     "owner": "Yonatan",
     "postId": "678e640b515319ecc52465ef"
 }

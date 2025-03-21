@@ -11,11 +11,7 @@ class PostController extends BaseController<IPost> {
   async create(req: Request, res: Response) {
     const userId = req.params.userId;
     
-    const post = {
-      ...req.body,
-      owner: userId,
-    };
-    req.body = post;
+    console.log("body:",req);
     super.create(req, res);
   }
 
