@@ -33,7 +33,7 @@ Content-Type: application/json
 
 POST http://localhost:3000/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YzRkMjQxNDFhODQ1MDU2YzllM2IiLCJyYW5kb20iOiIwLjU2MjgzMjEzMTgwNzc5NTEiLCJpYXQiOjE3NDI1NDkzNzcsImV4cCI6MTc0MjYzNTc3N30.Ah9pLkMNMII9q-FRYSoyTKTIM--g12cpXbWv8KeB7k8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YjAzMjk2YzkwNDc2Y2Q2MjJjYWEiLCJyYW5kb20iOiIwLjY4NjgyNTk5OTc5ODM0NDQiLCJpYXQiOjE3NDI1NTczNzAsImV4cCI6MTc0MjY0Mzc3MH0.cgHwEzDTZ4HgMVR7gg6_0Y3sgTOl1KCo8VHIF62z8Ww
 
 {
     "title": "Movie name",
@@ -68,8 +68,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "Bar@gmail.com",
-    "password": "2004"
+    "email": "yonatan@gmail.com",
+    "password": "123456"
 }
 
 ###

@@ -60,22 +60,21 @@ const generateTokens = (
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    //verify user & password
     const user = await userModel.findOne({ email: req.body.email });
-    if (!user) {
-      res.status(400).send("wrong email or password");
-      return;
+
+    if (!user || !user.password) {
+      return res.status(400).send("Wrong email or password");
     }
+
     const valid = await bcrypt.compare(req.body.password, user.password);
+
     if (!valid) {
-      res.status(400).send("wrong email or password");
-      return;
+      return res.status(400).send("Wrong email or password");
     }
-    //generate tokens
+
     const tokens = generateTokens(user);
     if (!tokens) {
-      res.status(400).send("Access Denied");
-      return;
+      return res.status(400).send("Access Denied");
     }
 
     await user.save();
@@ -84,12 +83,13 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       _id: user._id,
-      user: user,
+      user,
     });
   } catch (err) {
     next(err);
   }
 };
+
 
 type UserDocument = Document<unknown, object, IUser> &
   IUser &

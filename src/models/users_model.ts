@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export interface IUser {
-  firstName: string;
-  lastName: string;
+  firstName?: string;  
+  lastName?: string;   
   email: string;
-  password: string;
+  password?: string;  
+  googleId?: string;   
   _id?: string;
   refreshToken?: string[];
   profilePicture?: string;
@@ -14,11 +15,15 @@ export interface IUser {
 const userSchema = new Schema<IUser>({
   firstName: {
     type: String,
-    required: true,
+    required: function () {
+      return !this.googleId;  
+    },
   },
   lastName: {
     type: String,
-    required: true,
+    required: function () {
+      return !this.googleId;  
+    },
   },
   email: {
     type: String,
@@ -27,7 +32,14 @@ const userSchema = new Schema<IUser>({
   },
   password: {
     type: String,
-    required: true,
+    required: function () {
+      return !this.googleId;  
+    },
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true, 
   },
   refreshToken: {
     type: [String],

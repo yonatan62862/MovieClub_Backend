@@ -42,6 +42,8 @@ app.use("/auth", authRoutes);
 app.use("/likes", likesRoutes);
 app.use("/users", userRoutes);
 app.use("/chat", geminiRoutes);
+app.use('/api/auth', authRoutes); 
+
 
 const options = {
   definition: {

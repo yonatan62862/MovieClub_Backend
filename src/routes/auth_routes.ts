@@ -2,6 +2,7 @@ import express, { RequestHandler } from "express";
 import authController from "../controllers/auth_controller";
 import passport from "passport";
 import multer from "multer";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -174,19 +175,19 @@ router.post("/logout", authController.logout as RequestHandler);
  */
 router.post("/refresh", authController.refresh as RequestHandler);
 
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
-  (req, res) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = req.user as any;
-    const token = user.token;
-    res.redirect(`http://localhost:5001/home?token=${token}`);
+  passport.authenticate("google", { session: false, failureRedirect: "/login" }),
+  (req: any, res) => {
+    const user = req.user;
+    const secret = process.env.TOKEN_SECRET!;
+    const accessToken = jwt.sign({ id: user._id }, secret, { expiresIn: "15m" });
+    const refreshToken = jwt.sign({ id: user._id }, secret, { expiresIn: "7d" });
+
+    res.redirect(`${process.env.CLIENT_URL}/google-auth?token=${accessToken}&refresh=${refreshToken}`);
   }
 );
 
