@@ -4,30 +4,33 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/userModel";
 
-// ✅ Load environment variables before using them
+// Load environment variables
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-
 if (!JWT_SECRET) {
   throw new Error("Missing JWT_SECRET. Check your .env file.");
 }
 
-// **Register a new user**
-export const registerUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+// ✅ Register a new user
+export const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { username, email, password } = req.body;
     const profileImage = req.file
       ? `/uploads/${req.file.filename}`
       : "/uploads/default-avatar.png";
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      res.status(400).json({ message: "User already exists" });
+    // Check if email already exists
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      res.status(400).json({ message: "Email is already in use." });
+      return;
+    }
+
+    // Check if username already exists
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      res.status(400).json({ message: "Username is already taken." });
       return;
     }
 
@@ -45,12 +48,23 @@ export const registerUser = async (
     await newUser.save();
 
     res.status(201).json({ message: "User registered successfully" });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Registration Error:", error);
+
+    // ✅ Catch Mongo duplicate key errors (E11000)
+    if (error.code === 11000) {
+      const duplicateField = Object.keys(error.keyPattern)[0];
+      res.status(400).json({
+        message: `${duplicateField.charAt(0).toUpperCase() + duplicateField.slice(1)} already exists.`,
+      });
+      return;
+    }
+
     res.status(500).json({ message: "Error registering user", error });
   }
 };
 
-// **Login a user**
+// ✅ Login a user
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
@@ -69,7 +83,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    //Generate JWT token securely
+    // Generate JWT token
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "7d" });
 
     res.json({
