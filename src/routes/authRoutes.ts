@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-const FRONTEND_URL = "http://localhost:3000"; // Adjust if needed
+const FRONTEND_URL = "http://localhost:5001"; // Adjust if needed
 
 //Google Authentication Route
 router.get(
