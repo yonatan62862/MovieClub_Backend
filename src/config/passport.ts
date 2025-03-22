@@ -1,48 +1,50 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import User, { IUser } from "../models/users_model"; 
 import dotenv from "dotenv";
+import User from "../models/userModel";
 
 dotenv.config();
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientID: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       callbackURL: "/api/auth/google/callback",
+      scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
+        // Check if user already exists
         let user = await User.findOne({ googleId: profile.id });
 
         if (!user) {
-          user = await User.create({
+          user = new User({
+            username: profile.displayName,
+            email: profile.emails?.[0].value,
             googleId: profile.id,
-            name: profile.displayName,
-            email: profile.emails?.[0]?.value,
-            image: profile.photos?.[0]?.value,
+            profileImage: profile.photos?.[0].value,
           });
+          await user.save();
         }
 
-        return done(null, user as IUser); 
-      } catch (err) {
-        return done(err as Error, undefined); 
+        return done(null, user);
+      } catch (error) {
+        return done(error, false);
       }
     }
   )
 );
 
-// Serialize & Deserialize
 passport.serializeUser((user: any, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(async (id: string, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
-    done(null, user as IUser | undefined);
+    done(null, user);
   } catch (error) {
-    done(error as Error, undefined);
+    done(error, null);
   }
 });
