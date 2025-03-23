@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Initialize Google Generative AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
-// Helper function to extract movie recommendations from the AI response
 const extractMovies = (responseText: string) => {
   const matches = responseText.match(/\*\*(.*?)\*\*\s*-\s*(.*?)(?:\n|$)/g);
   if (!matches || matches.length < 2) return null;
@@ -22,7 +20,6 @@ const extractMovies = (responseText: string) => {
   });
 };
 
-// Controller function to get movie recommendations
 export const getRecommendations = async (
   req: Request,
   res: Response
@@ -45,14 +42,12 @@ export const getRecommendations = async (
     1. **Movie Name** - Short description.
     2. **Movie Name** - Short description.`;
 
-    // 🔹 Generate response from Gemini AI
     console.log("🟢 Sending prompt to Gemini AI...");
     const result = await model.generateContent(prompt);
     console.log("🟢 AI Response received:", result);
     const aiResponse = await result.response.text();
     console.log("🟢 AI Response text:", aiResponse);
 
-    // ✅ Extract movie names & descriptions correctly
     const extractedMovies = extractMovies(aiResponse);
     if (!extractedMovies || extractedMovies.length < 2) {
       console.error("🔴 ERROR: Could not extract movies correctly");
@@ -72,7 +67,6 @@ export const getRecommendations = async (
       movie2.name
     );
 
-    // Placeholder IMDb links (replace with actual logic to fetch links)
     const movie1Link = "https://www.imdb.com/";
     const movie2Link = "https://www.imdb.com/";
 
