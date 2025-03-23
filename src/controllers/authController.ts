@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/userModel";
 
-// Load environment variables
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -12,7 +11,6 @@ if (!JWT_SECRET) {
   throw new Error("Missing JWT_SECRET. Check your .env file.");
 }
 
-// ✅ Register a new user
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { username, email, password } = req.body;
@@ -20,24 +18,20 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
       ? `/uploads/${req.file.filename}`
       : "/uploads/default-avatar.png";
 
-    // Check if email already exists
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
       res.status(400).json({ message: "Email is already in use." });
       return;
     }
 
-    // Check if username already exists
     const existingUsername = await User.findOne({ username });
     if (existingUsername) {
       res.status(400).json({ message: "Username is already taken." });
       return;
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
     const newUser = new User({
       username,
       email,
@@ -51,7 +45,6 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
   } catch (error: any) {
     console.error("Registration Error:", error);
 
-    // ✅ Catch Mongo duplicate key errors (E11000)
     if (error.code === 11000) {
       const duplicateField = Object.keys(error.keyPattern)[0];
       res.status(400).json({
@@ -64,7 +57,6 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-// ✅ Login a user
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
@@ -76,14 +68,12 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Check password
     const isMatch = await bcrypt.compare(password, user.password as string);
     if (!isMatch) {
       res.status(400).json({ message: "Invalid email or password" });
       return;
     }
 
-    // Generate JWT token
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "7d" });
 
     res.json({

@@ -7,7 +7,6 @@ interface AuthenticatedRequest extends Request {
   user?: any;
 }
 
-// **Create a Post**
 export const createPost = async (
   req: Request,
   res: Response
@@ -41,7 +40,6 @@ export const createPost = async (
   }
 };
 
-// **Get All Posts**
 export const getPosts = async (req: Request, res: Response) => {
   try {
     const posts = await Post.find()
@@ -53,7 +51,6 @@ export const getPosts = async (req: Request, res: Response) => {
   }
 };
 
-// **Update Post**
 export const updatePost = async (
   req: Request,
   res: Response
@@ -84,7 +81,6 @@ export const updatePost = async (
   }
 };
 
-// **Delete Post**
 export const deletePost = async (
   req: Request,
   res: Response
@@ -112,7 +108,6 @@ export const deletePost = async (
   }
 };
 
-// **Like/Unlike Post**
 export const likePost = async (req: Request, res: Response): Promise<void> => {
   try {
     const post = await Post.findById(req.params.id);

@@ -1,13 +1,11 @@
 import { RequestHandler } from "express";
 import User from "../models/userModel";
 
-// **Get User Profile**
 export const getUserProfile: RequestHandler = async (req, res) => {
   try {
-    //Use Type Assertion to tell TypeScript that `req.user` exists
     const userId = (req as any).user.id;
 
-    const user = await User.findById(userId).select("-password"); // Exclude password
+    const user = await User.findById(userId).select("-password"); 
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
@@ -22,7 +20,6 @@ export const getUserProfile: RequestHandler = async (req, res) => {
   }
 };
 
-// **Update User Profile**
 export const updateUserProfile: RequestHandler = async (req, res) => {
   try {
     const userId = (req as any).user.id;
