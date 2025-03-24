@@ -1,3 +1,5 @@
 node_modules/
 .env
 dist/
+client-cert.pem/
+client-key-pem/
