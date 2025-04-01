@@ -59,6 +59,6 @@ router.get("/profile", protect, getUserProfile);
  *       200:
  *         description: Profile updated
  */
-router.put("/profile", protect, upload.single("profileImage"), updateUserProfile);
+router.put("/profile/:_id", upload.single("profileImage"), updateUserProfile);
 
 export default router;

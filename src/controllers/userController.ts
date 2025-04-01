@@ -5,7 +5,7 @@ export const getUserProfile: RequestHandler = async (req, res) => {
   try {
     const userId = (req as any).user.id;
 
-    const user = await User.findById(userId).select("-password"); 
+    const user = await User.findById(userId).select("-password");
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
@@ -22,7 +22,7 @@ export const getUserProfile: RequestHandler = async (req, res) => {
 
 export const updateUserProfile: RequestHandler = async (req, res) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.params._id;
 
     const user = await User.findById(userId);
     if (!user) {
@@ -30,6 +30,7 @@ export const updateUserProfile: RequestHandler = async (req, res) => {
       return;
     }
 
+    console.log({ body: req.body, file: req.file })
     if (req.body.username) user.username = req.body.username;
     if (req.file) user.profileImage = `/uploads/${req.file.filename}`;
 

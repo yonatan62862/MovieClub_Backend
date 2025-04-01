@@ -19,6 +19,7 @@ import userRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import aiRoutes from "./routes/aiRoutes";
+import chatsRouter from "./routes/chatRoutes";
 
 const app = express();
 
@@ -48,8 +49,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/ai-recommend", aiRoutes);
-
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/chats", chatsRouter)
+app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
 app.use("/public", express.static("public"));
 app.use("/storage", express.static("storage"));
 

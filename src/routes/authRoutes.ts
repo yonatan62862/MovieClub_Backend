@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-const FRONTEND_URL = "http://localhost:5001";
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5001";
 
 /**
  * @swagger
