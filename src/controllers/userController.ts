@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 import User from "../models/userModel";
 
 export const getUserProfile: RequestHandler = async (req, res) => {
@@ -41,5 +41,23 @@ export const updateUserProfile: RequestHandler = async (req, res) => {
       message: "Error updating profile",
       error: (error as Error).message,
     });
+  }
+};
+
+export const searchUser = async (req: Request, res: Response, next: NextFunction):Promise<void> => {
+  try {
+    const { username } = req.query;
+    if (!username || typeof username !== "string") {
+       res.status(400).json({ message: "Username query parameter is required" });
+    }
+
+    const users = await User.find({ username: { $regex: username, $options: "i" } });
+    if (!users.length) {
+       res.status(404).json({ message: "No users found" });
+    }
+    
+    res.json(users);
+  } catch (error) {
+    next(error);
   }
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getUserProfile,
+  searchUser,
   updateUserProfile,
 } from "../controllers/userController";
 import { protect } from "../middleware/authMiddleware";
@@ -60,5 +61,7 @@ router.get("/profile", protect, getUserProfile);
  *         description: Profile updated
  */
 router.put("/profile/:_id", upload.single("profileImage"), updateUserProfile);
+
+router.get("/search", searchUser);
 
 export default router;
